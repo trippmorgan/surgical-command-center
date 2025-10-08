@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Backend Dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Install Backend Dependencies",
+      "type": "shell",
+      "command": "npm install",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Setup Database",
+      "type": "shell",
+      "command": "./setup.sh",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test API Health",
+      "type": "shell",
+      "command": "curl http://localhost:3000/health",
+      "problemMatcher": []
+    },
+    {
+      "label": "View Database",
+      "type": "shell",
+      "command": "psql -U surgical_user -d surgical_command_center -h localhost",
+      "problemMatcher": []
+    },
+    {
+      "label": "Activate Conda Environment",
+      "type": "shell",
+      "command": "conda activate surgical_backend",
+      "problemMatcher": []
+    }
+  ]
+}

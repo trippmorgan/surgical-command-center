@@ -1,0 +1,25 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+  "python.defaultInterpreterPath": "${workspaceFolder}/../miniconda3/envs/surgical_backend/bin/python",
+  "python.terminal.activateEnvironment": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "terminal.integrated.env.linux": {
+    "CONDA_DEFAULT_ENV": "surgical_backend"
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/package-lock.json": true
+  }
+}

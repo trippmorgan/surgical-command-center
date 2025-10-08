@@ -1,0 +1,49 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Start Backend Server",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/server.js",
+      "cwd": "${workspaceFolder}/backend",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "restart": true,
+      "runtimeExecutable": "node"
+    },
+    {
+      "name": "Debug Backend Server",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/server.js",
+      "cwd": "${workspaceFolder}/backend",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true
+    },
+    {
+      "name": "Python: Dragon Integration",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/dragon-integration/websocket_client.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/dragon-integration",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/dragon-integration"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack",
+      "configurations": ["Start Backend Server", "Python: Dragon Integration"],
+      "stopAll": true
+    }
+  ]
+}
