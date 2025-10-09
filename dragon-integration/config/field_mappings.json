@@ -1,0 +1,87 @@
+{
+  "procedure_fields": {
+    "side": ["procedure_side", "laterality", "left or right"],
+    "access": ["access_site", "access point", "entry point"],
+    "sheath": ["sheath_size", "sheath"],
+    "closure": ["closure_method", "closure device"],
+    "indication": ["indication", "reason for procedure"],
+    "surgeon": ["surgeon", "operator", "attending"],
+    "patient": ["patient_name", "patient"]
+  },
+  
+  "vessels": {
+    "common_iliac": ["common iliac", "c i a"],
+    "external_iliac": ["external iliac", "e i a"],
+    "common_femoral": ["common femoral", "c f a"],
+    "superficial_femoral": ["superficial femoral", "s f a", "sfa"],
+    "profunda": ["profunda", "deep femoral", "profunda femoris"],
+    "popliteal": ["popliteal", "pop", "popliteal artery"],
+    "anterior_tibial": ["anterior tibial", "a t", "at"],
+    "posterior_tibial": ["posterior tibial", "p t", "pt"],
+    "peroneal": ["peroneal", "fibular"],
+    "tibial_peroneal_trunk": ["tibial peroneal trunk", "tp trunk"]
+  },
+  
+  "vessel_properties": {
+    "occlusion_length": ["occlusion", "occlusion length", "length", "stenosis length"],
+    "treatment": ["treatment", "intervention", "procedure"],
+    "tasc": ["tasc", "tasc classification", "classification"],
+    "calcification": ["calcification", "calc", "calcium"]
+  },
+  
+  "treatments": {
+    "pta": ["pta", "angioplasty", "balloon", "balloon angioplasty"],
+    "stent": ["stent", "stenting"],
+    "pta_stent": ["pta and stent", "angioplasty and stent", "balloon and stent"],
+    "atherectomy": ["atherectomy", "plaque removal"],
+    "tpa": ["tpa", "t p a", "thrombolytic"],
+    "mechanical_thrombolysis": ["mechanical thrombolysis", "thrombectomy"]
+  },
+  
+  "sides": {
+    "left": ["left", "left side", "left leg"],
+    "right": ["right", "right side", "right leg"],
+    "bilateral": ["bilateral", "both", "both sides", "both legs"]
+  },
+  
+  "access_sites": {
+    "femoral": ["femoral", "common femoral", "cfa"],
+    "radial": ["radial", "radial artery"],
+    "brachial": ["brachial", "brachial artery"],
+    "popliteal": ["popliteal", "pop", "behind knee"]
+  },
+  
+  "sheath_sizes": {
+    "4fr": ["4 french", "4fr", "four french"],
+    "5fr": ["5 french", "5fr", "five french"],
+    "6fr": ["6 french", "6fr", "six french"],
+    "7fr": ["7 french", "7fr", "seven french"]
+  },
+  
+  "closure_methods": {
+    "mynx": ["mynx", "m y n x", "closure device"],
+    "manual": ["manual", "manual pressure", "manual compression"],
+    "perclose": ["perclose", "suture closure"]
+  },
+  
+  "tasc_classification": {
+    "a": ["a", "tasc a", "class a"],
+    "b": ["b", "tasc b", "class b"],
+    "c": ["c", "tasc c", "class c"],
+    "d": ["d", "tasc d", "class d"]
+  },
+  
+  "calcification_levels": {
+    "none": ["none", "no calcification", "no calc"],
+    "mild": ["mild", "mild calcification", "light"],
+    "moderate": ["moderate", "moderate calcification", "medium"],
+    "severe": ["severe", "severe calcification", "heavy", "extensive"]
+  },
+  
+  "commands": {
+    "insert_macro": ["insert", "load template", "start procedure"],
+    "save": ["save", "save procedure", "complete", "finish"],
+    "clear": ["clear", "start over", "clear buffer", "reset"],
+    "show_fields": ["show fields", "what fields", "remaining fields", "list fields"]
+  }
+}

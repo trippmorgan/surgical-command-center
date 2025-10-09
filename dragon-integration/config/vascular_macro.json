@@ -1,0 +1,40 @@
+{
+  "vascular_procedure": {
+    "name": "Lower Extremity Vascular Procedure",
+    "template": "PROCEDURE: {procedure_type}\nDATE: {date}\n\nINDICATION: {indication}\n\nPROCEDURE DETAILS:\nSide: {side}\nAccess: {access_site}\nSheath Size: {sheath_size}\nClosure: {closure_method}\n\nVESSEL INTERVENTIONS:\n\nCommon Iliac:\n- Occlusion Length: {common_iliac_occlusion}\n- Treatment: {common_iliac_treatment}\n- TASC: {common_iliac_tasc}\n\nExternal Iliac:\n- Occlusion Length: {external_iliac_occlusion}\n- Treatment: {external_iliac_treatment}\n- TASC: {external_iliac_tasc}\n\nCommon Femoral:\n- Occlusion Length: {common_femoral_occlusion}\n- Treatment: {common_femoral_treatment}\n\nSuperficial Femoral:\n- Occlusion Length: {superficial_femoral_occlusion}\n- Treatment: {superficial_femoral_treatment}\n- TASC: {superficial_femoral_tasc}\n\nProfunda:\n- Occlusion Length: {profunda_occlusion}\n- Treatment: {profunda_treatment}\n\nPopliteal:\n- Location: {popliteal_location}\n- Occlusion Length: {popliteal_occlusion}\n- Treatment: {popliteal_treatment}\n\nAnterior Tibial:\n- Occlusion Length: {anterior_tibial_occlusion}\n- Treatment: {anterior_tibial_treatment}\n\nPosterior Tibial:\n- Occlusion Length: {posterior_tibial_occlusion}\n- Treatment: {posterior_tibial_treatment}\n\nPeroneal:\n- Occlusion Length: {peroneal_occlusion}\n- Treatment: {peroneal_treatment}\n\nNARRATIVE:\n{narrative}\n\nCOMPLICATIONS: {complications}\n\nCONCLUSION:\n{conclusion}",
+    "fields": [
+      "procedure_type",
+      "date",
+      "indication",
+      "side",
+      "access_site",
+      "sheath_size",
+      "closure_method",
+      "common_iliac_occlusion",
+      "common_iliac_treatment",
+      "common_iliac_tasc",
+      "external_iliac_occlusion",
+      "external_iliac_treatment",
+      "external_iliac_tasc",
+      "common_femoral_occlusion",
+      "common_femoral_treatment",
+      "superficial_femoral_occlusion",
+      "superficial_femoral_treatment",
+      "superficial_femoral_tasc",
+      "profunda_occlusion",
+      "profunda_treatment",
+      "popliteal_location",
+      "popliteal_occlusion",
+      "popliteal_treatment",
+      "anterior_tibial_occlusion",
+      "anterior_tibial_treatment",
+      "posterior_tibial_occlusion",
+      "posterior_tibial_treatment",
+      "peroneal_occlusion",
+      "peroneal_treatment",
+      "narrative",
+      "complications",
+      "conclusion"
+    ]
+  }
+}
