@@ -12,6 +12,7 @@ const procedureRoutes = require('./routes/procedures');
 // Initialize Express app
 const app = express();
 const server = http.createServer(app);
+const path = require('path');
 
 // Middleware
 app.use(helmet({
@@ -24,6 +25,14 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev')); // HTTP request logger
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Serve index.html for root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
 
 // API Routes
 app.use('/api/procedures', procedureRoutes);

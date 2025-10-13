@@ -12,3 +12,15 @@ dependencies:
       - asyncio
       - psycopg2-binary==2.9.9
       - sqlalchemy==2.0.23
+      # Dragon Dictation dependencies
+      - faster-whisper>=0.10.0
+      - numpy>=1.24.0
+      - sounddevice>=0.4.6
+      - soundfile>=0.12.1
+      - pynput>=1.7.6
+      - pyperclip>=1.8.2
+      - python-dateutil>=2.8.2
+      # CPU-optimized PyTorch (no CUDA issues)
+      - torch --index-url https://download.pytorch.org/whl/cpu
+      - torchvision --index-url https://download.pytorch.org/whl/cpu
+      - torchaudio --index-url https://download.pytorch.org/whl/cpu

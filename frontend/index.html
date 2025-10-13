@@ -855,16 +855,96 @@
         </div>
     </div>
     
+    <!-- Load WebSocket Client -->
+    <script src="js/websocket-client.js"></script>
+    
     <script>
-        // Simulate real-time updates
+        // Initialize WebSocket client
+        const wsClient = new SurgicalWebSocketClient('ws://localhost:3000');
+         
+    // Connect on page load
+        wsClient.connect();
+
+        // Setup callbacks
+        wsClient.onConnectedCallback = () => {
+            console.log('✅ Connected to backend');
+            document.querySelectorAll('.status-badge').forEach(badge => {
+                if (badge.textContent.includes('Dragon')) {
+                    badge.innerHTML = '<span class="status-dot active"></span><span>Dragon Connected</span>';
+                }
+            });
+        };
+        
+        wsClient.onDisconnectedCallback = () => {
+            console.log('❌ Disconnected from backend');
+            document.querySelectorAll('.status-badge').forEach(badge => {
+                if (badge.textContent.includes('Dragon')) {
+                    badge.innerHTML = '<span class="status-dot offline"></span><span>Dragon Offline</span>';
+                }
+            });
+        };
+        
+        wsClient.onTranscriptionCallback = (text) => {
+            console.log('📝 Transcription received:', text);
+            // Update transcription display
+            const transcriptionBox = document.querySelector('.transcription-box');
+            if (transcriptionBox) {
+                const newLine = document.createElement('div');
+                newLine.textContent = '> ' + text;
+                transcriptionBox.appendChild(newLine);
+                transcriptionBox.scrollTop = transcriptionBox.scrollHeight;
+                
+                // Keep only last 10 lines
+                while (transcriptionBox.children.length > 10) {
+                    transcriptionBox.removeChild(transcriptionBox.firstChild);
+                }
+            }
+        };
+        
+        // Connect on page load
+        wsClient.connect();
+        
+        // Save procedure function
         function saveProcedure() {
-            alert('Procedure data saved to PostgreSQL database!\n\nIntegration points ready:\n• Dragon Dictation: Connected\n• UltraLinq: Ready\n• Athena EMR: Ready\n• Local SQL: Active\n• Mirror Ledger: Synced\n• PACS: Connected');
+            // Collect form data
+            const formData = {
+                patient_name: "Jones, William R.",
+                mrn: "MRN-458932",
+                procedure_side: document.querySelector('[name="procedure_side"]')?.value,
+                access_site: document.querySelector('[name="access_site"]')?.value,
+                sheath_size: document.querySelector('[name="sheath_size"]')?.value,
+                closure_method: document.querySelector('[name="closure_method"]')?.value,
+                status: 'completed'
+            };
+            
+            // Send to backend via WebSocket
+            wsClient.sendProcedureUpdate(formData);
+            
+            // Also send via REST API
+            fetch('http://localhost:3000/api/procedures', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('✅ Procedure saved:', data);
+                wsClient.showNotification('Procedure saved to database!', 'success');
+            })
+            .catch(error => {
+                console.error('❌ Error saving:', error);
+                wsClient.showNotification('Error saving procedure', 'error');
+            });
         }
         
-        // Simulate voice input animation
+        // Simulate real-time updates
         setInterval(() => {
             const mic = document.querySelector('.mic-indicator');
-            mic.style.transform = `scale(${1 + Math.random() * 0.1})`;
+            if (mic) {
+                mic.style.transform = `scale(${1 + Math.random() * 0.1})`;
+            }
         }, 2000);
         
         // Tab switching
@@ -880,7 +960,18 @@
             widget.addEventListener('click', function() {
                 const sourceName = this.querySelector('.source-name span').textContent;
                 console.log(`Opening ${sourceName} integration panel...`);
-                // This is where you'd open detailed views of each data source
+            });
+        });
+        
+        // Add real-time field update listeners
+        document.querySelectorAll('select, input').forEach(field => {
+            field.addEventListener('change', function() {
+                const fieldName = this.name || this.id;
+                const value = this.value;
+                if (fieldName && value) {
+                    // Send update to backend
+                    wsClient.sendFieldUpdate(fieldName, value);
+                }
             });
         });
     </script>

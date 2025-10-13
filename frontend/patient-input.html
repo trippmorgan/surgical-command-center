@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration - Surgical Command Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 35px;
+        }
+        
+        .section-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .form-group label.required::after {
+            content: ' *';
+            color: #e74c3c;
+        }
+        
+        input, select, textarea {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+        
+        .btn-search {
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            margin-top: 5px;
+        }
+        
+        .notification {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .notification.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .notification.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .search-results {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .search-result-item {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-result-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 Patient Registration</h1>
+        <p class="subtitle">Enter patient demographics for surgical procedure</p>
+        
+        <div id="notification" class="notification"></div>
+        
+        <form id="patientForm">
+            <!-- Search Existing Patient -->
+            <div class="form-section">
+                <div class="section-title">🔍 Search Existing Patient</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Search by MRN, Name</label>
+                        <input type="text" id="searchQuery" placeholder="Enter MRN or name...">
+                        <button type="button" class="btn btn-search" onclick="searchPatient()">Search</button>
+                    </div>
+                </div>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+            
+            <!-- Core Demographics -->
+            <div class="form-section">
+                <div class="section-title">📋 Core Demographics</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="required">MRN (Medical Record Number)</label>
+                        <input type="text" id="mrn" name="mrn" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">First Name</label>
+                        <input type="text" id="first_name" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Middle Name</label>
+                        <input type="text" id="middle_name" name="middle_name">
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Date of Birth</label>
+                        <input type="date" id="date_of_birth" name="date_of_birth" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="gender" name="gender">
+                            <option value="unknown">Prefer not to say</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="form-section">
+                <div class="section-title">📞 Contact Information</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Primary Phone</label>
+                        <input type="tel" id="phone_primary" name="phone_primary" placeholder="(555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label>Secondary Phone</label>
+                        <input type="tel" id="phone_secondary" name="phone_secondary">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Address -->
+            <div class="form-section">
+                <div class="section-title">🏠 Address</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Address Line 1</label>
+                        <input type="text" id="address_line1" name="address_line1">
+                    </div>
+                    <div class="form-group">
+                        <label>Address Line 2</label>
+                        <input type="text" id="address_line2" name="address_line2">
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" id="city" name="city">
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" id="state" name="state" placeholder="GA">
+                    </div>
+                    <div class="form-group">
+                        <label>ZIP Code</label>
+                        <input type="text" id="zip_code" name="zip_code">
+                    </div>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" id="country" name="country" value="USA">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Emergency Contact -->
+            <div class="form-section">
+                <div class="section-title">🚨 Emergency Contact</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Contact Name</label>
+                        <input type="text" id="emergency_contact_name" name="emergency_contact_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Phone</label>
+                        <input type="tel" id="emergency_contact_phone" name="emergency_contact_phone">
+                    </div>
+                    <div class="form-group">
+                        <label>Relationship</label>
+                        <input type="text" id="emergency_contact_relationship" name="emergency_contact_relationship" placeholder="Spouse, Parent, etc.">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Insurance -->
+            <div class="form-section">
+                <div class="section-title">💳 Insurance Information</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Insurance Provider</label>
+                        <input type="text" id="insurance_provider" name="insurance_provider">
+                    </div>
+                    <div class="form-group">
+                        <label>Policy Number</label>
+                        <input type="text" id="insurance_policy_number" name="insurance_policy_number">
+                    </div>
+                    <div class="form-group">
+                        <label>Group Number</label>
+                        <input type="text" id="insurance_group_number" name="insurance_group_number">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Medical Information -->
+            <div class="form-section">
+                <div class="section-title">⚕️ Medical Information</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Primary Physician</label>
+                        <input type="text" id="primary_physician" name="primary_physician">
+                    </div>
+                </div>
+                <div class="form-grid" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label>Allergies</label>
+                        <textarea id="allergies" name="allergies" placeholder="List any allergies..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Medications</label>
+                        <textarea id="current_medications" name="current_medications" placeholder="List current medications..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Medical History</label>
+                        <textarea id="medical_history" name="medical_history" placeholder="Relevant medical history..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Information -->
+            <div class="form-section">
+                <div class="section-title">ℹ️ Additional Information</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Primary Language</label>
+                        <input type="text" id="primary_language" name="primary_language" value="English">
+                    </div>
+                    <div class="form-group">
+                        <label>Marital Status</label>
+                        <select id="marital_status" name="marital_status">
+                            <option value="">Select...</option>
+                            <option value="single">Single</option>
+                            <option value="married">Married</option>
+                            <option value="divorced">Divorced</option>
+                            <option value="widowed">Widowed</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>SSN Last 4 Digits</label>
+                        <input type="text" id="ssn_last_four" name="ssn_last_four" maxlength="4" placeholder="1234">
+                    </div>
+                </div>
+                <div class="form-grid" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="notes" name="notes" placeholder="Any additional notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+                <button type="button" class="btn btn-secondary" onclick="goToProcedure()">Cancel & Go to Procedure</button>
+                <button type="submit" class="btn btn-primary">💾 Save Patient</button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // Search for existing patient
+        async function searchPatient() {
+            const query = document.getElementById('searchQuery').value.trim();
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (!query) {
+                showNotification('Please enter a search term', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/patients/search/${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    resultsDiv.innerHTML = data.data.map(patient => `
+                        <div class="search-result-item" onclick="loadPatient('${patient.id}')">
+                            <strong>${patient.last_name}, ${patient.first_name}</strong><br>
+                            <small>MRN: ${patient.mrn} | DOB: ${patient.date_of_birth} | Age: ${patient.age}</small>
+                        </div>
+                    `).join('');
+                    resultsDiv.style.display = 'block';
+                } else {
+                    resultsDiv.innerHTML = '<div class="search-result-item">No patients found</div>';
+                    resultsDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                showNotification('Search failed: ' + error.message, 'error');
+            }
+        }
+        
+        // Load patient data into form
+        async function loadPatient(patientId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/patients/${patientId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const patient = data.data;
+                    
+                    // Fill form fields
+                    Object.keys(patient).forEach(key => {
+                        const input = document.getElementById(key);
+                        if (input && patient[key] !== null) {
+                            input.value = patient[key];
+                        }
+                    });
+                    
+                    // Hide search results
+                    document.getElementById('searchResults').style.display = 'none';
+                    document.getElementById('searchQuery').value = '';
+                    
+                    showNotification(`Loaded patient: ${patient.first_name} ${patient.last_name}`, 'success');
+                }
+            } catch (error) {
+                console.error('Load error:', error);
+                showNotification('Failed to load patient: ' + error.message, 'error');
+            }
+        }
+        
+        // Handle form submission
+        document.getElementById('patientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Remove empty fields
+            Object.keys(data).forEach(key => {
+                if (data[key] === '') {
+                    delete data[key];
+                }
+            });
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/patients', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification(`Patient ${data.first_name} ${data.last_name} saved successfully!`, 'success');
+                    
+                    // Store patient ID for procedure
+                    sessionStorage.setItem('currentPatientId', result.data.id);
+                    sessionStorage.setItem('currentPatientMRN', result.data.mrn);
+                    sessionStorage.setItem('currentPatientName', `${result.data.first_name} ${result.data.last_name}`);
+                    
+                    // Redirect to procedure form after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                } else {
+                    showNotification('Error: ' + (result.message || result.error), 'error');
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                showNotification('Failed to save patient: ' + error.message, 'error');
+            }
+        });
+        
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Clear form
+        function clearForm() {
+            document.getElementById('patientForm').reset();
+            document.getElementById('searchResults').style.display = 'none';
+        }
+        
+        // Go to procedure form
+        function goToProcedure() {
+            window.location.href = 'index.html';
+        }
+        
+        // Auto-calculate age when DOB changes
+        document.getElementById('date_of_birth').addEventListener('change', function() {
+            const dob = new Date(this.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            
+            console.log('Calculated age:', age);
+        });
+    </script>
+</body>
+</html>
