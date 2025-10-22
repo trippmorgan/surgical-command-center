@@ -1,55 +1,58 @@
-const { Sequelize } = require('sequelize');
-require('dotenv').config();
+const { Sequelize } = require("sequelize"); // Correct import using destructuring
+require("dotenv").config();
 
-// Create Sequelize instance with PostgreSQL connection
+// Ensure all required environment variables are present
+if (
+  !process.env.DB_NAME ||
+  !process.env.DB_USER ||
+  !process.env.DB_PASSWORD ||
+  !process.env.DB_HOST
+) {
+  throw new Error(
+    "Missing required database environment variables (DB_NAME, DB_USER, DB_PASSWORD, DB_HOST)"
+  );
+}
+
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT || 5432,
-    dialect: 'postgres',
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    dialect: "postgres",
+    logging: process.env.NODE_ENV === "development" ? console.log : false,
     pool: {
       max: 5,
       min: 0,
       acquire: 30000,
-      idle: 10000
+      idle: 10000,
     },
-    define: {
-      timestamps: true,
-      underscored: true,
-      freezeTableName: true
-    }
   }
 );
 
-// Test database connection
 const testConnection = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ PostgreSQL connection established successfully');
+    console.log("✅ Database connection has been established successfully.");
     return true;
   } catch (error) {
-    console.error('❌ Unable to connect to PostgreSQL database:', error.message);
+    // This is the error you would see if the database was missing or credentials were wrong
+    console.error("❌ Unable to connect to the database:", error.message);
     return false;
   }
 };
 
-// Initialize database (create tables if they don't exist)
 const initDatabase = async () => {
   try {
     await sequelize.sync({ alter: true });
-    console.log('✅ Database synchronized successfully');
+    console.log("✅ Database synchronized successfully.");
   } catch (error) {
-    console.error('❌ Error synchronizing database:', error.message);
-    throw error;
+    console.error("❌ Error synchronizing the database:", error);
   }
 };
 
 module.exports = {
   sequelize,
   testConnection,
-  initDatabase
+  initDatabase,
 };
