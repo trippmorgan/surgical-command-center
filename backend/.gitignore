@@ -1,3 +1,80 @@
+
+# Environment files - CRITICAL: Never commit these!
+.env
+*.env
+.env.*
+!.env.example
+!.env.secure
+backend/.env
+backend/.env.local
+backend/.env.*.local
+dragon_dictation_pro/.env
+
+# Credentials and secrets
+**/secrets/
+**/credentials/
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.env/
+.venv/
+*.pyc
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+*.log.*
+
+# Docker
+*.pid
+*.pid.lock
+docker-compose.override.yml
+
+# Node
+node_modules/
+dist/
+build/
+.npm
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/settings.json
+.idea/
+*.sublime-*
+
+# Testing
+coverage/
+.nyc_output/
+
+# Database
+*.sqlite
+*.db
+*.sql.backup
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Backup files
+*.bak
+*.backup
+*~.nib
+
 # Dependencies
 node_modules/
 package-lock.json
